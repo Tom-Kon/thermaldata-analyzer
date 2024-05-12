@@ -288,7 +288,6 @@ ui <- navbarPage(
                 "saveRaw",
                 "Do you want to save the raw data in an excel file too?",
                 value = FALSE),
-              checkboxInput("save", "Do you want to save your settings?", value = FALSE),
               checkboxInput(
                 "round1",
                 "Do you want to have a different number of decimals than 2 in the final output?",
@@ -296,14 +295,6 @@ ui <- navbarPage(
               conditionalPanel(
                 condition = "input.saveRaw == true",
                 textInput("excelName2", "What should the excel sheet be called?")
-              ),
-              conditionalPanel(
-                condition = "input.save == true",
-                textInput("templateName", "What should the saved template be called?")
-              ),
-              conditionalPanel(
-                condition = "input.save == true",
-                textInput("locationTemplate", "Where do you want the template file to be saved?", placeholder = "e.g., C:/Users/YourUsername/Documents")
               ),
               conditionalPanel(
                 condition = "input.round1 == true",
@@ -349,20 +340,6 @@ ui <- navbarPage(
                 "outputPath",
                 "Output Folder Path",
                 placeholder = "e.g., C:/Users/YourUsername/Documents"),
-              checkboxInput(
-                "checkLoad",
-                "Do you want to load settings?",
-                value = FALSE),
-              conditionalPanel(
-                condition = "input.checkLoad == true",
-                fileInput("load", "Upload your template here!")
-              ),
-              conditionalPanel(
-                condition = "input.checkLoad == true",
-                checkboxInput(
-                  "change",
-                  "Do you want to make changes to your template?")
-              ),
             ),
             column(
               6,
@@ -667,11 +644,6 @@ ui <- navbarPage(
           style = "font-size: medium; text-align: left; color: #333;",
           "Another important point is the fact that whatever files you upload must be consistent within them. You cannot have one file where you have an additional melting peak, for example. The number of tables per file and number of columns for any given table must be the same in the different documents you calculate in order to calculate the mean."
         ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The template saving functionality isn’t optimal, in the sense that you can’t edit its input. You will either need to accept everything that is already present in your template, or put in all the options yourself and make a new template. There is no middle road at the time of writing. Uploading the template also won’t change all the options in the user interface.
-               As of the time of writing, styling the output still needs to be done in Excel and is not automatic (although you could use Excel macros). The round is also not dynamic and always happens to two decimals."
-        ),
         tags$br(),
         tags$div(
           class = "main-header",
@@ -800,14 +772,6 @@ ui <- navbarPage(
         ),
         tags$div(
           class = "secondary-header",
-          "Saving the template"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This final block of code saves the user’s input into a template file that can be loaded to analyze other samples."
-        ),
-        tags$div(
-          class = "secondary-header",
           "What’s left "
         ),
         tags$p(
@@ -923,62 +887,6 @@ server <- function(input, output, session) {
     updateNavbarPage(session, "navbar", selected = "outputInputTab")
   })
   
-  
-  #-----------------------------------------------------------------------------------
-  #Loading a settings template
-  #-----------------------------------------------------------------------------------
-  
-  observeEvent(input$load, {
-    load <- input$load
-    loadDataPath <- load$datapath
-    outputLocation <- input$outputPath
-    
-    if (!is.null(load)) {
-      settings <- readRDS(loadDataPath)
-      
-      if (input$change == FALSE) {
-        # Retrieve values from the settings template
-        numCycles <- settings$numCycles
-        numTables(settings$numTables)
-        colTitles(settings$colTitles)
-        tableTitle <- settings$tableTitle
-        outputExcel <- settings$outputExcel
-        outputSheet <- settings$outputSheet
-        pans <- settings$pans
-        round <- settings$round
-      }
-      
-      # Update the input based on the settings template
-      updateSelectInput(session, "heatingCycle", selected = settings$numCycles)
-      updateSelectInput(session, "sampleName", selected = settings$tableTitle)
-      updateSelectInput(session, "excelName", selected = settings$outputExcel)
-      updateSelectInput(session, "excelSheet", selected = settings$outputSheet)
-      updateSelectInput(session, "pans", selected = settings$pans)
-      updateSelectInput(session, "round", selected = settings$round)
-      
-      for(i in 1:settings$numCycles) {
-        updateSelectInput(session, paste0("tables_cycle", i), selected = settings$numTables[i])
-      }
-      for(i in 1:settings$numCycles) {
-        updateSelectInput(session, paste0("coltitles_cycle", i), selected = settings$colTitles[i])
-      }
-    }
-  })
-  
-  # observe({
-  #   load <- input$load
-  #   loadDataPath <- load$datapath
-  #   if (!is.null(input$load)) {
-  #     settings <- readRDS(loadDataPath)
-  #     for(i in 1:settings$numCycles) {
-  #       updateSelectInput(session, paste0("tables_cycle", i), selected = settings$numTables[i])
-  #     }
-  #     for(i in 1:settings$numCycles) {
-  #       updateSelectInput(session, paste0("coltitles_cycle", i), selected = settings$colTitles[i])
-  #     }
-  #   }
-  # })
-  
   #-----------------------------------------------------------------------------------
 
 
@@ -1014,22 +922,20 @@ server <- function(input, output, session) {
       fileCounter <- fileCounter + 1
     }
 
-    # Extract other input data, but only if no template was uploaded
-    if (!is.null(input$load)) {
-      numCycles <- as.numeric(input$heatingCycle)
-      tableTitle <- input$sampleName
-      outputLocation <- input$outputPath
-      outputExcel <- input$excelName
-      outputSheet <- input$excelSheet
-      pans <- as.numeric(input$pans)
-      outputSheetRaw <- input$excelName2
-      
-      # Set rounding of the values according to the user input
-      if (input$round1 == FALSE) {
-        round <- 2
-      } else {
-        round <- as.numeric(input$round)
-      }
+    # Extract other input data
+    numCycles <- as.numeric(input$heatingCycle)
+    tableTitle <- input$sampleName
+    outputLocation <- input$outputPath
+    outputExcel <- input$excelName
+    outputSheet <- input$excelSheet
+    pans <- as.numeric(input$pans)
+    outputSheetRaw <- input$excelName2
+    
+    # Set rounding of the values according to the user input
+    if (input$round1 == FALSE) {
+      round <- 2
+    } else {
+      round <- as.numeric(input$round)
     }
     
     #---------------------------------------------------------------------------------------------------------------
@@ -1189,24 +1095,6 @@ server <- function(input, output, session) {
         "Error: The given sheet name for the raw data output and analysis output is the same. Please make sure to give different names to these two Excel sheets"
       })
       return(NULL)
-    }
-
-    # Check if name & location for the settings template to save was given
-    if (input$save == TRUE) {
-      if (is.null(input$templateName) || input$templateName == "") {
-        print("Error: File name of the settings template not specified. Please provide file name.")
-        output$errorMessage <- renderText({
-          "Error: File name of the settings template not specified. Please provide file name."
-        })
-        return(NULL)
-      }
-      if (is.null(input$locationTemplate) || input$locationTemplate == "") {
-        print("Error: Output location for the template not specified. Please provide the location for settings template.")
-        output$errorMessage <- renderText({
-          "Error: Output location for the template not specified. Please provide the location for settings template."
-        })
-        return(NULL)
-      }
     }
     
     
@@ -1715,37 +1603,6 @@ server <- function(input, output, session) {
         col <- col + pans + 2
       }
       saveWorkbook(wb, paste(outputExcel, ".xlsx", sep = ""), overwrite = TRUE)
-    }
-
-
-    # Save settings
-    if (input$save == TRUE) {
-      numCycles <- as.numeric(input$heatingCycle)
-      settings <- list(
-        numCycles = numCycles,
-        numTables = numTables(), # Accessing value of reactiveVal numTables
-        if (input$keepTitles == FALSE) {
-          colTitles <- colTitles() # Accessing value of reactiveVal colTitles
-        } else {
-          colTitles <- colTitles # Accessing value of reactiveVal colTitles
-        },
-        tableTitle = tableTitle,
-        outputExcel = outputExcel,
-        outputSheet = outputSheet,
-        pans = pans
-      )
-    }
-
-    if (input$save == TRUE) {
-      # Set working directory for template file
-      if (dir.exists(input$locationTemplate)) {
-        setwd(input$locationTemplate)
-        cat("Changed working directory to:", input$locationTemplate, "\n")
-      } else {
-        cat("Error: Template file output directory does not exist or cannot be accessed.\n")
-        return(NULL)
-      }
-      saveRDS(settings, paste0(input$templateName, ".rds", sep = ""))
     }
 
     output$analysisMessage <- renderText({
