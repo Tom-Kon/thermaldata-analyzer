@@ -37,7 +37,7 @@ The app mainly focuses on analyzing differential scanning calorimetry (DSC) data
 <\p>
 
 <p align="center">
-<img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%201%20main%20menu.png" width='60%'>
+<img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%202%20tutorial.png" width='60%'>
 <\p>
 
 
