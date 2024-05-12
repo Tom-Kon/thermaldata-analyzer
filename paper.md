@@ -11,12 +11,12 @@ authors:
     orcid: 0000-0003-1256-6557
     affiliation: 1
   - name: Julia Bandera
-    orcid: 
+    orcid: 0009-0000-1104-7232
     affiliation: 2
 affiliations:
  - name: Department of pharmaceutical and pharmacological sciences, Herestraat 49 box 921, Catholic University of Leuven, 3000 Leuven, Belgium 
    index: 1
- - name:
+ - name: Faculty of Bioscience Engineering, Kasteelpark Arenberg 20, Catholic University of Leuven, 3001 Leuven, Belgium
    index: 2
 date: 
 bibliography: paper.bib
