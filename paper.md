@@ -32,9 +32,13 @@ The abovementioned limitation can of course be solved by a program, but research
 
 The app mainly focuses on analyzing differential scanning calorimetry (DSC) data, but this is visible only in the nomenclature of the output. It can be used for any data obtained in TRIOS, including data from different instruments. Data generated using older TA instruments can still be opened in TRIOS, meaning that the software presented in this paper is also compatible with these machines. The app is able to take almost any data structure as input, facing few constraints that are stated in the tutorial section of the app. 
 
+<p align="center">
+<img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%201%20main%20menu.png" width='60%'>
+<\p>
 
-
-![figure 2 tutorial](https://github.com/Tom-Kon/thermaldata-analyzer/assets/169445863/e968e17c-eedf-4325-bb55-bf382d5205a7)
+<p align="center">
+<img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%201%20main%20menu.png" width='60%'>
+<\p>
 
 
 # Mathematics
