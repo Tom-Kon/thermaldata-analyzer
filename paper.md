@@ -28,18 +28,29 @@ Thermal analysis is used in many scientific fields and industries, including the
 # Statement of need
 TRIOS does allow the user to save analysis templates and report templates for rapid analysis of similar samples. It also allows for exporting data to Excel, but this process is less automated and less customizable. This results in problems when analyzing similar samples in the context of scientific research. This is especially true when replicates (runs) are involved, since TRIOS treats those as completely separate files. This makes automatically exporting data from different runs to Excel convoluted. This is exacerbated when researcher wishes to calculate descriptive statistics such as the mean, standard deviation and relative standard deviation of a sample, even though these are very simple operations. 
 
-The abovementioned limitation can of course be solved by a program, but researchers that come from a pharmaceutical background might also not have enough coding know-how to write a piece of software that can do simple analyses for them. That is why the thermal data analyzer was developed. It consists of a user-friendly user interface, made using ShinyR (the code is written in R). It relies on the user generating several word documents containing their analysis data from several replicates. These documents can be generated automatically in the TRIOS software, and the ShinyR app contains a tutorial on how to do this. This whole process can be automized, all outputs are customizable to fit the user's needs, and it doesn't require any knowledge of code. Moreover, the app contains several internal checks to ensure that the user didn't make any mistakes while putting in their data, which result in clear error statements if something went wrong. The app outputs Excel documents, where means, standard deviations and relative standard deviations are grouped into formatted tables. It can also be used to extract the raw data from word documents and export it to the Excel files. 
+The abovementioned limitation can of course be solved by a program, but researchers that come from a pharmaceutical background might also not have enough coding know-how to write a piece of software that can do simple analyses for them. That is why the thermal data analyzer was developed. It consists of a user interface made using ShinyR (the code is written in R). The code relies on the user generating several word documents containing their analysis data from several replicates. These documents can be generated automatically in the TRIOS software, and the ShinyR app contains a tutorial (figure 2) on how to do this. This whole process can be automized, all outputs are customizable to fit the user's needs, and it doesn't require any knowledge of code (figure 1). Moreover, the app contains several internal checks to ensure that the user didn't make any mistakes while putting in their data, which result in clear error statements if something went wrong. The app outputs Excel documents, where means, standard deviations and relative standard deviations are grouped into formatted tables. It can also be used to extract the raw data from word documents and export it to the Excel files. User-friendlieness, even for people without any coding knowledge, is the most important aspect of the code, resulting in the user interfaces presented in figures 1 and 2. 
 
-The app mainly focuses on analyzing differential scanning calorimetry (DSC) data, but this is visible only in the nomenclature of the output. It can be used for any data obtained in TRIOS, including data from different instruments. Data generated using older TA instruments can still be opened in TRIOS, meaning that the software presented in this paper is also compatible with these machines. The app is able to take almost any data structure as input, facing few constraints that are stated in the tutorial section of the app. 
+The app mainly focuses on analyzing differential scanning calorimetry (DSC) data, but this is visible only in the nomenclature of the output. It can be used for any data obtained in TRIOS, including data from different instruments. Data generated using older TA instruments can still be opened in TRIOS, meaning that the software presented in this paper is also compatible with these machines. The app is able to take almost any data structure as input, facing few constraints that are stated in the tutorial (figure 2) section of the app. 
 
-<p align="center">
-<img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%201%20main%20menu.png" width='60%'>
-<\p>
+<br>
 
 <p align="center">
-<img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%202%20tutorial.png" width='60%'>
-<\p>
+  <img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%201%20main%20menu.png" width='60%'>
+  <br>
+  <em>Figure 1: The user interface where the user can input their data. The next page asks for inputs such as the files to analyze and the output excel     
+  name. The button used to run the analysis is also located on page 2. </em>
+</p>
 
+<br>
+<br>
+
+<p align="center">
+  <img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/figure%202%20tutorial.png" width='60%'>
+  <br>
+  <em>Figure 2: The tutorial, also present inside of the app, gives detailed instructions regarding the input data and how to make the required documents in TRIOS. It also contains information on the limitations of the program as well as a short overview of how the code works.</em>
+</p>
+
+<br>
 
 # Mathematics
 Formulas used in the code when at least 3 replicates are present are the standard formulas for calculating the mean ($\overline{x}$), standard deviation (s) and relative standard deviation (RSD) of a dataset with n observations ($x_i$). 
