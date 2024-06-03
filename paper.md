@@ -54,7 +54,7 @@ The app mainly focuses on analyzing differential scanning calorimetry (DSC) data
 <br>
 
 # Mathematics
-Formulas used in the code when at least 3 replicates are present are the standard formulas for calculating the mean ($\overline{x}$), standard deviation (s) and relative standard deviation (RSD) of a dataset with n observations ($x_i$). 
+The formulas used in the code for an input consisting of at least three replicates are the standard formulas for calculating the mean ($\overline{x}$), standard deviation (s) and relative standard deviation (RSD) of a dataset with n observations ($x_i$). 
 
 $$\overline{x} = \sum_{i=1}^{i=n} \ x_i * \frac{1}{n}$$
 
