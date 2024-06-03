@@ -6,6 +6,8 @@ tags:
   - Thermal data
   - Differential scanning calorimetry
   - TRIOS
+  - Dynamic mechanical analysis
+  - Thermogravimetric analysis
 authors:
   - name: Tom Konings
     orcid: 0000-0003-1256-6557
@@ -18,12 +20,12 @@ affiliations:
    index: 1
  - name: Faculty of Bioscience Engineering, Kasteelpark Arenberg 20, Catholic University of Leuven, 3001 Leuven, Belgium
    index: 2
-date: 
+date: Submitted on 3rd June 2024
 bibliography: paper.bib
 ---
 
 # Summary
-Thermal analysis is used in many scientific fields and industries, including the food- and pharmaceutical industries. Common techniques include dynamic mechanical analysis, rheology studies, differential scanning calorimetry, and so forth. Such analyses give the researcher access to essential material properties such as the viscosity, the glass transition, and other events such as melting, just to name a few. One of the most important suppliers of instruments capable of such analyses is TA instruments. The most recent software, TRIOS, facilitates instrument control and data analysis with user-friendly features. However, it has limitations in terms of customizable and automatic data analysis, requiring supplementary software packages.
+Thermal and rheological analysis is used in many scientific fields and industries, including the food- and pharmaceutical industries. Common techniques include dynamic mechanical analysis, thermogravimetric analysis, (modulated) differential scanning calorimetry, and so forth. Such analyses give the researcher access to essential material properties such as the viscosity, the glass transition, and other events such as melting, just to name a few. One important supplier of instruments capable of such analyses is TA instruments. Their most recent software, TRIOS, facilitates instrument control and data analysis with user-friendly features. However, it has limitations in terms of customizable and automatic data analysis, requiring supplementary software packages.
 
 # Statement of need
 TRIOS does allow users to save analysis templates and report templates for rapid analysis of similar samples. It also permits exporting data to Excel, but this process is less automated and customizable. Consequently, issues arise when analyzing similar samples in scientific research contexts, particularly when dealing with replicates (runs) as TRIOS treats them as entirely separate files. This complicates the automatic export of data from different runs to Excel. Furthermore, difficulties are exacerbated when researchers need to calculate descriptive statistics such as mean, standard deviation, and relative standard deviation, despite these being straightforward operations.
