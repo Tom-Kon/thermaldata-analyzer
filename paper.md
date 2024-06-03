@@ -76,3 +76,10 @@ The software presented in this paper was developed as part of a project funded b
 
 
 # References
+'@Seifi:2020'
+\cite{Panzade2024}
+\cite{Liu2022}
+\cite{Jones2012}
+\cite{Jurczak2020}
+
+
