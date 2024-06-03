@@ -8,6 +8,6 @@ The repository contains:
 <ol>
   <li>general_data_analyzer_integrated.R: this is the code (app). </li>
   <li>paper.md: this is the paper submitted to the journal of open source software. The figures it contains are in the "figures" folder. </li>
-  <li>The code can be verified by running the files in the "examples" folder. The same folder also contains an example of an expected output excel. </li>  
+  <li>The code can be verified by running the files in the "examples" folder. Different examples are presented in different subfolders, all having different datastuctures. The subfolder of each particular example also contains an expected output excel. </li>  
 </ol>
 
