@@ -11,4 +11,6 @@ The repository contains:
   <li>The code can be verified by running the files in the "examples" folder. Different examples are presented in different subfolders, all having different datastuctures. The subfolder of each particular example also contains an expected output excel. </li>  
 </ol>
 
+Community guidelines: in case you wish to contribute to the software, report issues or have further questions about the app's functionality, you can find the contact details of the corresponding author in the app's tutorial. Any suggestions, contributions or bug reports are highly appreciated! 
+
 In case you've landed here but do not know how GitHub works, here is the online version of the code: https://posit.cloud/content/7489585. In the panel on the right, select the file with the .R extension. Click "Run App" in the top of the main screen. You'll be able to access the app's tutorial in this way and try out the online version. 
