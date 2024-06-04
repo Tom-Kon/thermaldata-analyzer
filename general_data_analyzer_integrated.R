@@ -41,10 +41,10 @@ ordinalSuffix <- function(x) {
     suffix <- "th"
   } else {
     suffix <- switch(x %% 10,
-      "st",
-      "nd",
-      "rd",
-      "th"
+                     "st",
+                     "nd",
+                     "rd",
+                     "th"
     )
   }
   paste0(x, suffix)
@@ -62,26 +62,26 @@ cleanAndConvert <- function(x) {
 
 
 ui <- navbarPage(
-  "DSC Data Analyzer",
+  "Thermal Data Analyzer",
   id = "navbar",
   lang = "en",
-
-    #-----------------------------------------------------------
-    #Static user interface: user input tabs
-    #-----------------------------------------------------------
-      tabPanel(
-        title= "  Analysis settings", 
-        icon = icon("gears", class = "fa-solid"),
-        value = "analysisTab",
-        
-        
-        #---------------------------------------------------------------------------------------------------------------------------
-        #Static user interface: all of the styling is put in a tabPanel, since putting it as a separate entity results in errors
-        #---------------------------------------------------------------------------------------------------------------------------
-        
-        tags$head(
-          tags$style(
-            HTML("
+  
+  #-----------------------------------------------------------
+  #Static user interface: user input tabs
+  #-----------------------------------------------------------
+  tabPanel(
+    title= "  Analysis settings", 
+    icon = icon("gears", class = "fa-solid"),
+    value = "analysisTab",
+    
+    
+    #---------------------------------------------------------------------------------------------------------------------------
+    #Static user interface: all of the styling is put in a tabPanel (see above), since putting it as a separate entity results in errors
+    #---------------------------------------------------------------------------------------------------------------------------
+    
+    tags$head(
+      tags$style(
+        HTML("
         /* Apply a background color to the entire page */
         body {
           background-color: #f4f7fa; /* Light blue-gray background */
@@ -245,568 +245,558 @@ ui <- navbarPage(
         padding-bottom: 20px; 
       }
       ")
-          )
-        ),
-        
-        #Actual input tabs are here---------------------------------------------------------------------------------------------------------------------------
-        
-        fluidPage(
-          titlePanel(
-            tags$p(
-              style = "text-align: center; color: #3c8dbc;",
-              "Analysis settings: what runs did you perform?"),
-            windowTitle = "DSC Data Analyzer"),
-          tags$br(), 
-          tags$br(), 
-          tags$p(
-            style = "font-size: medium; text-align: left; color: #333;",
-            "Welcome to the DSC Data Analyzer! This is the input screen, and it is the only place where you need to actually do work :). After inputting everything, the output will be saved to an Excel of your liking and will also be displayed in this program (see output in the navigation bar)."
-          ),
-          tags$br(),
+      )
+    ),
     
-          fluidRow(
-            column(
-              6,
-              selectInput(
-                "pans",
-                "How many pans did you run?",
-                choices = c("2", "3", "4", "5")), # Selection menu
-              selectInput(
-                "heatingCycle",
-                "How many heating cycles did you run?",
-                choices = c("1", "2", "3", "4")), # Selection menu
-              uiOutput("tablesDropdowns"),
-              checkboxInput(
-                "keepTitles",
-                "Are you happy with the titles you used for your table columns in your word documents? If no, uncheck this box.",
-                value = TRUE),
-              uiOutput("coltitlesInput"), # Dynamic UI for additional dropdown menus
-            ),
-            column(
-              6,
-              checkboxInput(
-                "saveRaw",
-                "Do you want to save the raw data in an excel file too?",
-                value = FALSE),
-              checkboxInput(
-                "round1",
-                "Do you want to have a different number of decimals than 2 in the final output?",
-                value = FALSE),
-              conditionalPanel(
-                condition = "input.saveRaw == true",
-                textInput("excelName2", "What should the excel sheet be called?")
-              ),
-              conditionalPanel(
-                condition = "input.round1 == true",
-                selectInput("round", "To how many decimals should your results be rounded?", choices = c("0", "1", "2", "3", "4", "5")), # Selection menu
-              ),
-            )
+    #Actual input tabs are here---------------------------------------------------------------------------------------------------------------------------
+    
+    fluidPage(
+      titlePanel(
+        tags$p(
+          style = "text-align: center; color: #3c8dbc;",
+          "Analysis settings: what runs did you perform?"),
+        windowTitle = "Thermal Data Analyzer"),
+      tags$br(), 
+      tags$br(), 
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Welcome to the Thermal Data Analyzer! It will help you analyse your thermal data by taking word documents as input and spitting out the cleaned up and analysed data in  Excel tables. If you don't know how to start, navigate to the \"tutorial\" tab in the menu above. This page requires you to tell the app what your analysis looks like. Unsure about what you did exactly? Check the word documents! Press the \"next tab\" button once you're done."
+      ),
+      tags$br(),
+      
+      fluidRow(
+        column(
+          6,
+          selectInput(
+            "pans",
+            "How many pans did you run?",
+            choices = c("2", "3", "4", "5")), 
+          selectInput(
+            "heatingCycle",
+            "How many heating cycles did you run?",
+            choices = c("1", "2", "3", "4")),  
+          uiOutput("tablesDropdowns"),
+          checkboxInput(
+            "keepTitles",
+            "Are you happy with the titles you used for your table columns in your word documents? If no, uncheck this box.",
+            value = TRUE),
+          uiOutput("coltitlesInput"),
+        ),
+        column(
+          6,
+          checkboxInput(
+            "saveRaw",
+            "Do you want to save the raw data in an excel file too?",
+            value = FALSE),
+          checkboxInput(
+            "round1",
+            "Do you want to have a different number of decimals than 2 in the final analysis output (raw data is never rounded)? If left unchecked, the program will round everything to 2 decimals.",
+            value = FALSE),
+          conditionalPanel(
+            condition = "input.saveRaw == true",
+            textInput("excelName2", "What should the excel sheet be called?")
           ),
-          fluidRow(
-            column(
-              12,
-              mainPanel(
-                actionButton("Next", "Next tab")
-              ),
-            )
+          conditionalPanel(
+            condition = "input.round1 == true",
+            selectInput("round", "To how many decimals should your results be rounded?", choices = c("0", "1", "2", "3", "4", "5")),
           ),
+        )
+      ),
+      fluidRow(
+        column(
+          12,
+          mainPanel(
+            actionButton("Next", "Next tab")
+          ),
+        )
+      ),
+    )
+  ),
+  
+  tabPanel(
+    "Output and input files",
+    icon = icon("file-import", class = "fa-solid"),
+    value = "outputInputTab",
+    fluidPage(
+      titlePanel(
+        tags$p(style = "text-align: center; color: #3c8dbc;", "Input and output files"),
+        windowTitle = "DSC Data Analyzer"),
+      tags$br(),
+      tags$br(), 
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "You're almost good to go. In this tab, please upload the word documents to analyse. You also need to specify where the file is to be saved, and you'll need to give everything a suitable name. When you're all set, press \"Run Analysis\". Note that you can group several analyses in the same Excel file by simply changing the sheet name without closing the app (don't forget the raw data sheet as well in case you have one)."
+      ),
+      tags$br(),
+      
+      fluidRow(
+        column(
+          6,
+          fileInput(
+            "files",
+            "What files do you want to analyze?",
+            multiple = TRUE),
+          textInput(
+            "outputPath",
+            "Output Folder Path",
+            placeholder = "e.g., C:/Users/YourUsername/Documents"),
+        ),
+        column(
+          6,
+          textInput("excelName", "Output Excel File Name"),
+          textInput("excelSheet", "Output Sheet Name"),
+          textInput("sampleName", "Sample Name"),
+        )
+      ),
+      tags$br(),
+      
+      fluidRow(
+        column(
+          12,
+          mainPanel(
+            actionButton("runAnalysis", "Run Analysis")
+          ),
+        )
+      ),
+      tags$br(),
+      
+      
+      fluidRow(
+        mainPanel(
+          div(
+            id = "analysisMessageContainer",
+            textOutput("analysisMessage")
+          )     
         )
       ),
       
-      tabPanel(
-        "Output and input files",
-        icon = icon("file-import", class = "fa-solid"),
-        value = "outputInputTab",
-        fluidPage(
-          titlePanel(
-            tags$p(style = "text-align: center; color: #3c8dbc;", "Input and output files"),
-            windowTitle = "DSC Data Analyzer"),
-          tags$br(),
-          tags$br(), 
-          tags$p(
-            style = "font-size: medium; text-align: left; color: #333;",
-            "Welcome to the DSC Data Analyzer! This is the input screen, and it is the only place where you need to actually do work :). After inputting everything, the output will be saved to an Excel of your liking and will also be displayed in this program (see output in the navigation bar)."
-          ),
-          tags$br(),
-          
-          fluidRow(
-            column(
-              6,
-              fileInput(
-                "files",
-                "What files do you want to analyze?",
-                multiple = TRUE),
-              textInput(
-                "outputPath",
-                "Output Folder Path",
-                placeholder = "e.g., C:/Users/YourUsername/Documents"),
-            ),
-            column(
-              6,
-              textInput("excelName", "Output Excel File Name"),
-              textInput("excelSheet", "Output Sheet Name"),
-              textInput("sampleName", "Sample Name"),
-            )
-          ),
-          tags$br(),
-          
-          fluidRow(
-            column(
-              12,
-              mainPanel(
-                actionButton("runAnalysis", "Run Analysis")
-              ),
-            )
-          ),
-          tags$br(),
-          
-          
-          fluidRow(
-            mainPanel(
-              div(
-                id = "analysisMessageContainer",
-                textOutput("analysisMessage")
-              ) # Display the analysis message 
-            )
-          ),
-          
-          fluidRow(
-            mainPanel(
-              div(
-                id = "errorMessageContainer",
-                textOutput("errorMessage")
-              ) # Display the analysis message 
-            )
-          ),
+      fluidRow(
+        mainPanel(
+          div(
+            id = "errorMessageContainer",
+            textOutput("errorMessage")
+          )    
         )
       ),
- 
-    #-----------------------------------------------------------
-    #Static user interface: tutorial tab
-    #-----------------------------------------------------------
-    
-    tabPanel(
-      "Tutorial",
-      icon = icon("book", class = "fa-solid"),
-      value = "tutorialTab",
-      fluidPage(
-        titlePanel(tags$p(style = "text-align: left; color: #3c8dbc;", "DSC data analyzer tutorial"), windowTitle = "DSC Data Analyzer"),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Hey there! Welcome to the tutorial to the DSC data analyzer. This page gives some background on the app, gives some additional tips and tricks, and can be considered as a general user manual.
-              As a first important point, please note that this app was developed primarily for differential scanning calorimetry – hence the terminology, such as the constant use of heating cycle. However, if you want it to use for anything else, it works just as well!"
+    )
+  ),
+  
+  #-----------------------------------------------------------
+  #Static user interface: tutorial tab
+  #-----------------------------------------------------------
+  
+  tabPanel(
+    "Tutorial",
+    icon = icon("book", class = "fa-solid"),
+    value = "tutorialTab",
+    fluidPage(
+      titlePanel(tags$p(style = "text-align: left; color: #3c8dbc;", "DSC data analyzer tutorial"), windowTitle = "DSC Data Analyzer"),
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Hey there fellow scientist! Welcome to the tutorial to the thermal data analyzer. This page gives some background on the app, gives some additional tips and tricks, and can be considered as a general user manual.
+              As a first important point, please note that this app was developed primarily for differential scanning calorimetry – hence the terminology, such as the constant use of heating cycle. However, if you want it to use for any other technique compatible with TRIOS, it works just as well! For any further questions not answered in the tutorial, contact me at tom.konings@kuleuven.be"
+      ),
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333; font-weight: bold",
+        "In case you came here to look for troubleshooting: most errors are covered and will result in an error message. However, one notable error that will still crash the app is having the Excel file you want to write to open when you execute the app. Close the Excel file and try again."
+      ),
+      
+      tags$br(),
+      tags$div(
+        class = "main-header",
+        "Basic principle of the app"
+      ),
+      
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+       "The app takes word documents as input and outputs formatted Excel tables. These Word files are generated using a semi-automised process in TRIOS, software by TA instruments (another section of the tutorial instructs you on how to do this). Word files are used because they are the most customizable and straightforward to generate in TRIOS. The input required in the various menus helps the program to separate your heating cycles. They are basically landmarks for the program. The main purpose of the program is to generate descriptive statistics for your data, but you can also export raw data."  
+      ),
+      
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+      "Does it work? Yes it does! The program has been checked manually for accuracy. Moreover, if you happen to make a mistake in your input, the software will let you know using an error message. There are a few limitations left that are outlined in this tutorial (look for the title mentioning limiations)."
         ),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333; font-weight: bold",
-          "In case you came here to look for troubleshooting: most errors are covered and will result in an error message. However, one notable error that will still crash the app is having the Excel file you want to write to open when you execute the app. Close the Excel file and try again."
-        ),
-        tags$br(),
-        tags$div(
-          class = "main-header",
-          "Steps in TRIOS"
-        ),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The first thing you’ll need to do is generate the word documents you’ll feed into the app in TRIOS. Here is how you do it. This part assumes you know the TRIOS software well already, and is not a full tutorial for the software."
-        ),
+      
+      tags$br(),
+      tags$div(
+        class = "main-header",
+        "Steps in TRIOS"
+      ),
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The first thing you’ll need to do is generate the word documents you’ll feed into the app in TRIOS. Here is how you do it. This part assumes you know the TRIOS software well already, and is not a full tutorial for the software."
+      ),
+      tags$ol(
+        class = "ordered-list",
+        tags$li("Open the files you want to analyze."),
+        tags$li("Don't split the files into the different cycles, but simply send each cycle to a new graph. Do so by right clicking on a step in the file manager on the left and selecting \"send to new graph\"."),
+        tags$li("Perform the analysis manually like you normally would for each heating or cooling cycle. When you save your analysis (see next point), TRIOS can distinguish the different cycles and knows what analysis was performed for which cycle."),
+        tags$li("Go to format > save analysis. This will save a file."),
+        tags$li("Now, go to format > generate report. A new screen pops up. You will see many options on the right side of the screen. In these options, you will find the analyses you did, grouped per heating cycle. Dragging one of the options (for example the onset of a certain integration you did) to the screen on the left displays the value. However, in order for the app to work, you’ll need to follow these very specific instructions."),
         tags$ol(
-          class = "ordered-list",
-          tags$li("Open the files you want to analyze."),
-          tags$li("Perform the analysis manually like you normally would."),
-          tags$li("Go to format > save analysis. This will save a file."),
-          tags$li("Now, go to format > generate report. You will see many options on the right side of the screen. In these options, you will find the analyses you did, grouped per heating cycle. Dragging one of the options (for example the onset of a certain integration you did) to the screen on the left displays the value. However, in order for the app to work, you’ll need to follow these very specific instructions."),
-          tags$ol(
-            class = "nested-list",
-            tags$li("Every event you want to analyze is one single table. For example, if you have a Tg and a melting point of interest in heating cycle 1, you’ll have 2 tables for that heating cycle."),
-            tags$li("Implement tables in the TRIOS report file by clicking the “table” option in the top area."),
-            tags$li("Every table has one “title column”: the first column is always considered to contain some kind of title, so do not put any values there. Besides this limitation, you may have as many columns as you wish in your tables, and they don’t need to be consistent."),
-            tags$li("Every table has one “title row”. Here, you will put more detailed information on the value in the row below. For example, you might want to put something like “Tg onset.”"),
-            tags$li("The final result should look something like this:"),
-            div(
-              class = "nested-list-container",
-              tags$table(
-                class = "nested-list",
-                tags$tr(
-                  tags$th("-general title-"),
-                  tags$th("-title-"),
-                  tags$th("-title-"),
-                  tags$th("-title-"),
-                  tags$th("-title-")
-                ),
-                tags$tr(
-                  tags$td("-nothing-"),
-                  tags$td("-value-"),
-                  tags$td("-value-"),
-                  tags$td("-value-"),
-                  tags$td("-value-")
-                )
+          class = "nested-list",
+          tags$li("Every event you want to analyze is one single table. For example, if you have a glass transition and a melting point of interest in heating cycle 1, you’ll have two tables for that heating cycle."),
+          tags$li("Implement tables in the TRIOS report file by clicking the “table” option in the top area."),
+          tags$li("Every table has one “title column”: the first (most left) column is always considered to contain some kind of title, so do not put any values there. Besides this limitation, you may have as many columns as you wish in your tables, and different tables can have different numbers of columns."),
+          tags$li("Every table has two rows. One is the “title row” containing more detailed information on the values in the row below. For example, you might want to put something like \"Tg onset (°C)\", \"Tg midpoint (°C)\", and \"Tg end (°C)\". The second row contains the values matching each title. Making your titles nicely from the start is helpful because the program can read those and use them for the output Excel."),
+          tags$li("The final result should look something like this, for every table:"),
+          div(
+            class = "nested-list-container",
+            tags$table(
+              class = "nested-list",
+              tags$tr(
+                tags$th("-general title-"),
+                tags$th("-title-"),
+                tags$th("-title-"),
+                tags$th("-title-"),
+                tags$th("-title-")
+              ),
+              tags$tr(
+                tags$td("-nothing-"),
+                tags$td("-value-"),
+                tags$td("-value-"),
+                tags$td("-value-"),
+                tags$td("-value-")
               )
-            ),
-            tags$li("Important note: when making your tables in TRIOS, you’ll see an option regarding table headers. DO NOT select this option, as otherwise the code will read your table as having just one row, violating the rule above."),
-            tags$li("As long as you follow the rules above, you may have as many tables as you wish and as many tables per heating cycle as you wish. There’s no further need for consistency.")
+            )
           ),
-          tags$li("You’ll want to save your report as a template. Do this by clicking  “save template” in the options at the top. You can apply this template to a new file after analyzing it as described in point 3. To do this, go to format > apply, select apply template and upload your file."),
-          tags$li("In theory, saving only the report template and not the analysis is enough to apply it to a new file. However, only applying the report template prevents you from making any changes to the analysis and updating the report accordingly - you'll have to make an entirely new report if you don't apply the saved analysis file too. If you see an error and do want to edit the analysis, make the necessary changes in the tabs with the analyzed files, delete the erroneous value from the report and drag a new value to the right location as specified in point 4 (not one of the letters, point 4 in of itself)"),
-          tags$li("Export the reports you made as word documents (like you would normally export anything from TRIOS), and you’re all set! Names etc. don’t matter for the code."),
+          tags$li(
+            style = "font-weight: bold;", 
+            "Important note: when making your tables in TRIOS, you’ll see an option regarding table headers. DO NOT select this option, as otherwise the code will read your table as having just one row, violating the rule above stating that every table needs two rows. Also note that when you open the documents in word afterwards and change something in the tables, word might chagne the layout for some reason and still add a header row. The program will spot this and give an error, but be aware that this can cause this particular error."),
+          tags$li("As long as you follow the rules above, you may have as many tables as you wish and as many tables per heating cycle as you wish. There’s no further need for consistency.")
         ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Note: something that happens when you apply an analysis to a file is that the curves are superposed. If you want to avoid this, pull the curves apart BEFORE conducting the analysis; this fixes the issue."
+        tags$li("Next, you will want to save your report as a template. Do this by clicking  “save template” in the options at the top."),
+        tags$li("So far, everything was manual, but here is where the automation comes in. You can apply the saved analysis and the saved report template to a new file, and the analysis will be carried out automatically, including the generation of a report. As a matter of fact, you can also only save the report as a template and apply that directly. This is a bit quicker, but the downside is that you won't be able to drag new analysis elements to add new values in the report. If one sample requires slightly different integration limits, you can simply modify the values in the report by editing the analysis in the the tab that was generated when you applied the report template (see tab list on the bottom of the screen, -your sample title- (Report 1). The Word documents you just made semi-automatically serve as the app's input."),
+        tags$li("Export the reports you made as word documents by clicking the TRIOS logo on the top left, and you’re all set!"),
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Note: something that happens when you apply an analysis to a file is that the curves are superposed. If you want to avoid this, pull the curves apart BEFORE conducting the analysis; this fixes the issue. This only works when you also apply an analysis template, not when you only apply a report template"
+      ),
+      tags$br(),
+      tags$div(
+        class = "main-header",
+        "Installing and running the app"
+      ),
+      
+      tags$br(),
+      tags$div(
+        class = "secondary-header",
+        "Running the app by installing R on your computer"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "This is the more complicated option, but certainly the more practical once you get there since you don’t have to download/upload files to the cloud. Follow these steps, in exactly this order:"
+      ),
+      tags$ol(
+        class = "ordered-list",
+        tags$li("Install Java. Make sure you pick the 64bit (x64) option if your system is x64 (offline version). This is the download link : ", tags$a(href = "https://www.java.com/en/download/manual.jsp", "https://www.java.com/en/download/manual.jsp"),"."),
+        tags$li("Install RTools: ", tags$a(href = "https://cran.r-project.org/bin/windows/Rtools/", "https://cran.r-project.org/bin/windows/Rtools/"),"."),
+        tags$li("Install R: follow the left link here: ", tags$a(href = "https://posit.co/download/rstudio-desktop/", "https://posit.co/download/rstudio-desktop/"),"."),
+        tags$li("Install RStudio (right side): ", tags$a(href = "https://posit.co/download/rstudio-desktop/", "https://posit.co/download/rstudio-desktop/"),"."),
+        tags$li("Open the code file. Running the code (Run App on the top right) will install all additional packages"),
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Running the app via the cloud"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The easiest option for people without experience. The website that is best used for this is posit, the official R website. For you to be able to see the code after clicking the link in the GitHub Readme file, you’ll still need to select the correct file on the right.
+              If you’re running R locally (on your computer) and want to transition to the online version, you’ll need to remove all code setting the working directory (ctrl+ F to look up the command ‘setwd’). This is because you can’t change the working directory in posit: you'll need to download the analysed files from the environment (panel on the right)."
+      ),
+      tags$br(),
+      tags$div(
+        class = "main-header",
+        "App features and limitations"
+      ),
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The whole point of the app is to calculate the means, standard deviations and relative standard deviations of the files you upload. It then groups the results per heating cycle, adds all relevant titles, rounds to the amount of decimals you tell it to, and writes a nicely formatted table to an Excel file. Here is an example of an output table:"
+      ),
+      tags$table(
+        class = "data-table",
+        style = "width: 100%;",
+        tags$tr(
+          tags$th("-Your sample title-: heating cycle 1"),
+          tags$th("Means"),
+          tags$th("Standard Deviations"),
+          tags$th("Relative Standard Deviations")
         ),
-        tags$br(),
-        tags$div(
-          class = "main-header",
-          "Installing and running the app"
+        tags$tr(
+          tags$td("Solvent Peak Onset (°C)"),
+          tags$td("8,75"),
+          tags$td("0,15"),
+          tags$td("1,66")
         ),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The fact that you’ve come this far means that you know how to run the app one way or another, but it is probably useful to know that there are two alternatives."
+        tags$tr(
+          tags$td("Solvent Peak location (°C)"),
+          tags$td("46,65"),
+          tags$td("0,99"),
+          tags$td("2,11")
         ),
-        tags$div(
-          class = "secondary-header",
-          "Running the app by installing R on your computer"
+        tags$tr(
+          tags$td("Melting Peak Onset (°C)"),
+          tags$td("135,44"),
+          tags$td("0,19"),
+          tags$td("0,14")
         ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This is the more complicated option, but certainly the more practical once you get there since you don’t have to download/upload files to the cloud. Follow these steps, in exactly this order:"
+        tags$tr(
+          tags$td("Melting Peak location (°C)"),
+          tags$td("146,9"),
+          tags$td("0,05"),
+          tags$td("0,03")
         ),
+        tags$tr(
+          tags$td("Melting Peak enthalpy (J/g)"),
+          tags$td("17,4"),
+          tags$td("0,39"),
+          tags$td("2,22")
+        ),
+        tags$tr(
+          tags$td("Tg Onset (°C)"),
+          tags$td("25,61"),
+          tags$td("0,28"),
+          tags$td("1,08")
+        ),
+        tags$tr(
+          tags$td("Tg midpoint (°C)"),
+          tags$td("30,67"),
+          tags$td("1"),
+          tags$td("3,26")
+        ),
+        tags$tr(
+          tags$td("Tg end (°C)"),
+          tags$td("34,93"),
+          tags$td("1,19"),
+          tags$td("3,41")
+        ),
+      ),
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "This is the main feature, and much of the app is focused around it. Your input boils down to the following:"
+      ),
+      tags$ul(
+        class = "ordered-list",
+        tags$li("In the first tab (analysis settings):"),
         tags$ol(
-          class = "ordered-list",
-          tags$li("Install Java. Make sure you pick the 64bit (x64) option if your system is x64 (offline version). Download link is here: ", tags$a(href = "https://www.java.com/en/download/manual.jsp", "https://www.java.com/en/download/manual.jsp")),
-          tags$li("Install RTools: ", tags$a(href = "https://cran.r-project.org/bin/windows/Rtools/", "https://cran.r-project.org/bin/windows/Rtools/"), ". The code works with RTools 4.3."),
-          tags$li("Install R: follow the left link here: ", tags$a(href = "https://posit.co/download/rstudio-desktop/", "https://posit.co/download/rstudio-desktop/")),
-          tags$li("Install RStudio (right side): ", tags$a(href = "https://posit.co/download/rstudio-desktop/", "https://posit.co/download/rstudio-desktop/")),
-          tags$li("Open the code file. A small popup at the top will tell you that you need to install packages if you want to run it. Click install, wait until the process is done, and you’re good to go! If the popup doesn’t show up by itself, look for the part of the code saying “library(something)”. Click in the console (bottom panel), type the command install.packages(“something”) for each “library(something)” that you see and press enter every time you typed in one. The “.”, the brackets and the “” are very important. One package that you would need to install is xlsx, yielding: install.packages(“xlsx”)."),
+        class = "ordered-list",
+          tags$li("How many heating cycles, pans, and tables per heating cycle you have. If you aren’t happy with the titles in each first row of every table that you generated via TRIOS, you can also untick the box asking about that and give custom titles. If you do this, you will need to input new titles for everything, however."),
+          tags$li("Whether you want to save the raw data as well"),
+          tags$li("The name of the excel sheet the data should be saved in"),
+          tags$li("Whether you want to round to two decimals (analysed data only, not the raw data)"),
+          tags$li("If the answer to the previous question was no, to how many decimals you want ro round"),
         ),
-        tags$div(
-          class = "secondary-header",
-          "Running the app via the cloud"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The easiest option. The website that is best used for this is posit, the official R website. For you to be able to see the code after receiving an invitation link, you’ll still need to select the right file on the right.
-              If you’re running R locally (on your computer) and want to transition to the online version, you’ll need to remove all code setting the working directory (ctrl+ F to look up the command ‘setwd’). This is because you can’t really change the working directory in posit: you’ll have to upload the files you want to analyze to the environment (panel on the right) and download the output Excel manually as well (panel on the right as well)."
-        ),
-        tags$br(),
-        tags$div(
-          class = "main-header",
-          "App features and limitations"
-        ),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The whole point of the app is to calculate the means, standard deviations and relative standard deviations of the files you upload. It then groups the results per heating cycle, adds all relevant titles, rounds to two decimals, and writes it to an excel. One output table, albeit with some extra styling from Excel, looks like this."
-        ),
-        tags$br(),
-        tags$table(
-          class = "data-table",
-          style = "width: 100%;",
-          tags$tr(
-            tags$th("07_02_24_PPrOx_spraycastfilm: heating cycle 1"),
-            tags$th("Means"),
-            tags$th("Standard Deviations"),
-            tags$th("Relative Standard Deviations")
-          ),
-          tags$tr(
-            tags$td("Solvent Peak Onset (°C)"),
-            tags$td("8,75"),
-            tags$td("0,15"),
-            tags$td("1,66")
-          ),
-          tags$tr(
-            tags$td("Solvent Peak location (°C)"),
-            tags$td("46,65"),
-            tags$td("0,99"),
-            tags$td("2,11")
-          ),
-          tags$tr(
-            tags$td("Solvent Peak enthalpy (J/g)"),
-            tags$td("51,47"),
-            tags$td("0,88"),
-            tags$td("1,72")
-          ),
-          tags$tr(
-            tags$td("Recrystallisation Peak Onset (°C)"),
-            tags$td("77,13"),
-            tags$td("0,05"),
-            tags$td("0,07")
-          ),
-          tags$tr(
-            tags$td("Recrystallisation Peak location (°C)"),
-            tags$td("85,74"),
-            tags$td("0,7"),
-            tags$td("0,81")
-          ),
-          tags$tr(
-            tags$td("Recrystallisation Peak enthalpy (J/g)"),
-            tags$td("3,91"),
-            tags$td("0,69"),
-            tags$td("17,7")
-          ),
-          tags$tr(
-            tags$td("Melting Peak Onset (°C)"),
-            tags$td("135,44"),
-            tags$td("0,19"),
-            tags$td("0,14")
-          ),
-          tags$tr(
-            tags$td("Melting Peak location (°C)"),
-            tags$td("146,9"),
-            tags$td("0,05"),
-            tags$td("0,03")
-          ),
-          tags$tr(
-            tags$td("Melting Peak enthalpy (J/g)"),
-            tags$td("17,4"),
-            tags$td("0,39"),
-            tags$td("2,22")
-          ),
-          tags$tr(
-            tags$td("Tg Onset (°C)"),
-            tags$td("25,61"),
-            tags$td("0,28"),
-            tags$td("1,08")
-          ),
-          tags$tr(
-            tags$td("Tg midpoint (°C)"),
-            tags$td("30,67"),
-            tags$td("1"),
-            tags$td("3,26")
-          ),
-          tags$tr(
-            tags$td("Tg end (°C)"),
-            tags$td("34,93"),
-            tags$td("1,19"),
-            tags$td("3,41")
-          ),
-          tags$tr(
-            tags$td("Tg Change (°C)"),
-            tags$td("9,33"),
-            tags$td("0,94"),
-            tags$td("10,09")
-          )
-        ),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This is the main feature, and much of the app is focused around it. As a part of this, you must indicate:"
-        ),
+        tags$li("In the second tab (input and output files)"),
         tags$ol(
-          class = "ordered-list",
-          tags$li("The files you want to analyze, by uploading them."),
-          tags$li("The name of the Excel file."),
-          tags$li("The name of the Excel file sheet (if there is already an Excel file with the same name, but you change the sheet name, it will write to the same Excel but a different sheet!)."),
-          tags$li("The sample name: this is a name displayed at the top left of all the exported tables, for example “spray dried powder”. Since the results are grouped per heating cycle, a “heating cycle X” is added after the sample name for every table, where X varies between 1 and the number of heating cycles you have."),
-          tags$li("Where you want to export the excel file to, so a file directory."),
+        class = "ordered-list",
+        tags$li("The files you want to analyze, by uploading them."),
+        tags$li("The name of the Excel file."),
+        tags$li("The name of the Excel file sheet (if there is already an Excel file with the same name, but you change the sheet name, it will write to the same Excel but a different sheet!)."),
+        tags$li("The sample name: this is a name displayed at the top left of all the exported tables, for example “spray dried powder”. Since the results are grouped per heating cycle, a “heating cycle X” is added after the sample name for every table, where X varies between 1 and the number of heating cycles you have."),
+        tags$li("Where you want to export the excel file to, so a file directory."),
         ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Moreover, in the “method” tab, you will need to indicate how many heating cycles, pans, and tables per heating cycle you have. If you aren’t happy with the titles in each first row of every table that you generated via TRIOS, you can also untick the box asking about that and give custom titles. If you do this, you will need to input new titles for everything, however."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Additional features"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "If you need to run a certain sample over and over again, you might want to save your settings. You can do this by going to the method tab, clicking “do you want to save your settings”, and then giving your settings template file a name and a file directory. Pressing “run analysis” actually saves the template. You can load this template by clicking the “do you want to load settings” box in the “input” tab and uploading the right template.
-               If you also want to save your raw data, tick “Do you want to save your raw data in an Excel file too?”. It will ask you for the sheet name. The raw data will be written to the same Excel file as the other data, but a different file. The raw data is exported when pressing “Run analysis”."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Error handling"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The code is able to deal with user error and report on it in a clear way. If, for example, you have one table with only 1 row or with 3 rows, you will get an error message explaining this upon running the code. If the number of tables you say you have in your document in the input doesn’t match with the actual number of tables, you’ll get another error, and so forth."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Compatibility"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The code is compatible with any word documents. TRIOS can analyze many different files in the manner described above, including DSC, TGA, DMA, etc. It can also analyze other CSV files. Finally, it can handle files from Universal Analysis as well."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Limitations"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "First and foremost, the tables must be consistent in the sense that the first column is never taken into account and the first row doesn’t contain any values, as mentioned above."
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Another important point is the fact that whatever files you upload must be consistent within them. You cannot have one file where you have an additional melting peak, for example. The number of tables per file and number of columns for any given table must be the same in the different documents you calculate in order to calculate the mean."
-        ),
-        tags$br(),
-        tags$div(
-          class = "main-header",
-          "How the code works"
-        ),
-        tags$br(),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This section gives a very short overview of different code snippets. If you want to know the details, go have a look at the code itself 😊. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Packages"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Packages are essentially expansions of R that make life easier. They introduce new commands that don’t need to be coded all the way. In order to use packages, they need to be called with the (library) function."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Functions"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          'There are two functions at the top of the code that are defined here and called later on. The first is clean and convert, which will remove all units from the data and convert everything to numeric values (in the original word document, everything is encoded as characters, which is a problem). The ordinal suffix helps generate the correct menus for the interactive user interface (for example if you have two heating cycles, it will ask “how many tables do you have in your 2nd heating cycle”. This function generates the "nd".'
-        ),
-        tags$div(
-          class = "secondary-header",
-          "ShinyR"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The whole app is based on ShinyR. ShinyR has three components:"
-        ),
-        tags$ol(
-          class = "ordered-list",
-          tags$li("Code defining the user interface."),
-          tags$li("Server logic (the code that does the actual analysis). "),
-          tags$li("The line shinyApp(ui = ui, server = server)"),
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Some important aspects of ShinyR are the reactive values and CSS code. Look into the relevant documentation if you wish to know more, as this is outside of the scope of this tutorial."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Generating the general UI"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "CSS code and HTML are used to style and generate the user interface. This is also where parts like the three menus “input”, “methods” and “tutorial” are defined."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Generating the interactive UI "
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This piece of code changes the menus the user sees based on the values of other menus. For example, if you indicate having 3 heating cycles, you will be asked thrice about how many tables you have in each heating cycle. This is also for a large part where user input variables are defined. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Loading functionality"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This small block of code defines values according to a template you loaded. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Extracting tables"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "This is the first actual analysis part of the code. Tables in word documents have assigned numbers in the xml file. You don’t see this, but the code can read this. This is the whole principle behind extracting the data.
+      ),
+
+      tags$div(
+        class = "secondary-header",
+        "Error handling"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The code is able to deal with user error and report on it in a clear way. If, for example, you have one table with only 1 row or with 3 rows, you will get an error message explaining this upon running the code. If the number of tables you say you have in your document in the input doesn’t match with the actual number of tables, you’ll get another error, and so forth."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Compatibility"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The code is compatible with any word documents. TRIOS can analyze many different files in the manner described above, including DSC, TGA, DMA, etc. It can also analyze other CSV files. Finally, it can handle files from Universal Analysis as well. If you want to open data from Universal analysis, select \"Thermal data\" (bottom right) when opening files in TRIOS."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Limitations"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "First and foremost, the tables must be consistent in the sense that the first column is never taken into account and the first row doesn’t contain any values, as mentioned above."
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Another important point is the fact that whatever files you upload must be consistent within them. You cannot have one file where you have an additional melting peak, for example. The number of tables per file and number of columns for any given table must be the same in the different documents you calculate in order to calculate the mean."
+      ),
+      tags$br(),
+      tags$div(
+        class = "main-header",
+        "How the code works"
+      ),
+      tags$br(),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "This section gives a very short overview of different code snippets. If you want to know the details, go have a look at the code itself 😊. "
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Packages"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Packages are essentially expansions of R that make life easier. They introduce new commands that don’t need to be coded all the way. In order to use packages, they need to be called with the (library) function."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Functions"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        'There are two functions at the top of the code that are defined here and called later on. The first is clean and convert, which will remove all units from the data and convert everything to numeric values (in the original word document, everything is encoded as characters, which is a problem). The ordinal suffix helps generate the correct menus for the interactive user interface (for example if you have two heating cycles, it will ask “how many tables do you have in your 2nd heating cycle”. This function generates the "nd".'
+      ),
+      tags$div(
+        class = "secondary-header",
+        "ShinyR"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The whole app is based on ShinyR. ShinyR has three components:"
+      ),
+      tags$ol(
+        class = "ordered-list",
+        tags$li("Code defining the user interface."),
+        tags$li("Server logic (the code that does the actual analysis). "),
+        tags$li("The line shinyApp(ui = ui, server = server)"),
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Some important aspects of ShinyR are the reactive values and CSS code. Look into the relevant documentation if you wish to know more, as this is outside of the scope of this tutorial."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Generating the general UI"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "CSS code and HTML are used to style and generate the user interface. This is also where parts like the three menus “input”, “methods” and “tutorial” are defined."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Generating the interactive UI "
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "This piece of code changes the menus the user sees based on the values of other menus. For example, if you indicate having 3 heating cycles, you will be asked thrice about how many tables you have in each heating cycle. This is also for a large part where user input variables are defined. "
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Loading functionality"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "This small block of code defines values according to a template you loaded. "
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Extracting tables"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "This is the first actual analysis part of the code. Tables in word documents have assigned numbers in the xml file. You don’t see this, but the code can read this. This is the whole principle behind extracting the data.
             From every “table 1” of every file, the second row of values is extracted. The rows thus extracted are grouped in one long vector called tempDf. tempDf is then cleaned and rendered numeric.
             You’ll notice that everything works based on for-loops in the code. Important user inputs are the number of pans, the number of heating cycles, and the number of tables per heating cycles. The former two are values, while the latter is a vector. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Grouping tables into df"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The different tempDf vectors are then grouped into a table called df. This works smoothly when df and tempDf are of the same length, but this is often not the case. Hence, when needed, NAs are inserted at the right locations so as not to influence the descriptive statistics."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Grouping dfs into allCycles"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "All the dfs are then grouped into another data frame called allCycles, again taking into account different lengths. allCycles is printed in case the user wants to export their raw data as well. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Generating dataFrameCycle from df"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "DataFrameCycles is composed of different rows which are in turn composed of the different statistics. This is very easy to edit, and if reader wishes to have additional statistics (more than just means, SDs and relative SDs), they can edit this part relatively quickly. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Binding the dataFrameCycles to combinedStats"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The different dataFrameCycles, which regroup the data per heating cycle, are combined into combinedStats."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Generating the vectors containing the titles"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "The next block of code makes a list containing all the column titles, but only if the user indicates that they want to keep the titles of their original tables."
-        ),
-        tags$div(
-          class = "secondary-header",
-          "Picking appropriate entries from combinedStats and grouping them per heating cycle, adding titles, writing to an excel"
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Finally, data is extract back to several different data frames from combined stats using some arithmetic, is bound with the appropriate title vectors, and is written to an excel. "
-        ),
-        tags$div(
-          class = "secondary-header",
-          "What’s left "
-        ),
-        tags$p(
-          style = "font-size: medium; text-align: left; color: #333;",
-          "Other code snippets are mainly error- and exception handling. Error handling gives a clear output to the user in case they did something wrong, while exception handling ensures that the code can work no matter the data structure. For example, the rest of the code would sometimes cause issues when all the tables only have two columns."
-        ),
-      )
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Grouping tables into df"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The different tempDf vectors are then grouped into a table called df. This works smoothly when df and tempDf are of the same length, but this is often not the case. Hence, when needed, NAs are inserted at the right locations so as not to influence the descriptive statistics."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Grouping dfs into allCycles"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "All the dfs are then grouped into another data frame called allCycles, again taking into account different lengths. allCycles is printed in case the user wants to export their raw data as well. "
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Generating dataFrameCycle from df"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "DataFrameCycles is composed of different rows which are in turn composed of the different statistics. This is very easy to edit, and if reader wishes to have additional statistics (more than just means, SDs and relative SDs), they can edit this part relatively quickly. "
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Binding the dataFrameCycles to combinedStats"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The different dataFrameCycles, which regroup the data per heating cycle, are combined into combinedStats."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Generating the vectors containing the titles"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "The next block of code makes a list containing all the column titles, but only if the user indicates that they want to keep the titles of their original tables."
+      ),
+      tags$div(
+        class = "secondary-header",
+        "Picking appropriate entries from combinedStats and grouping them per heating cycle, adding titles, writing to an excel"
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Finally, data is extract back to several different data frames from combined stats using some arithmetic, is bound with the appropriate title vectors, and is written to an excel. "
+      ),
+      tags$div(
+        class = "secondary-header",
+        "What’s left "
+      ),
+      tags$p(
+        style = "font-size: medium; text-align: left; color: #333;",
+        "Other code snippets are mainly error- and exception handling. Error handling gives a clear output to the user in case they did something wrong, while exception handling ensures that the code can work no matter the data structure. For example, the rest of the code would sometimes cause issues when all the tables only have two columns."
+      ),
     )
   )
-    #-----------------------------------------------------------
-
+)
+#-----------------------------------------------------------
+#Actual code (not stricly related to the UI) starts here
+#----------------------------------------------------------
 
 server <- function(input, output, session) {
   
   #-----------------------------------------------------------------------------------
   # Dynamic menus: include numTables, numColHeatingCycle, colTitles, Nrheatingcycles
   #-----------------------------------------------------------------------------------
-
+  
   #Define numTables and colTitles as reactive values
   numTables <- reactiveVal(NULL)
   colTitles <- reactiveVal(NULL)
-
+  
   #Extract numCycles in the context of the dynamic dropdown menus - will be done again later for the rest of the code
   output$tablesDropdowns <- renderUI({
     numCycles <- as.numeric(input$heatingCycle)
-
+    
     # Generate dynamic dropdown menus based on the number of cycles selected
     lapply(1:numCycles, function(i) {
       selectInput(paste0("tables_cycle", i),
-        paste("How many tables do you have in your", ordinalSuffix(i), "heating cycle?"),
-        choices = 1:10
+                  paste("How many tables do you have in your", ordinalSuffix(i), "heating cycle?"),
+                  choices = 1:10
       )
     })
   })
-
+  
   # Update numTables vector
   observe({
     numCycles <- as.numeric(input$heatingCycle)
@@ -814,7 +804,7 @@ server <- function(input, output, session) {
       as.numeric(input[[paste0("tables_cycle", i)]])
     }))
   })
-
+  
   # Generation of the dynamic dropdown menus for column titles depending on the number of cycles and tables
   output$coltitlesInput <- renderUI({
     if (input$keepTitles == FALSE) {
@@ -829,8 +819,8 @@ server <- function(input, output, session) {
           } else {
             lapply(1:numTables, function(j) {
               textInput(paste0("coltitles_cycle", i, "_table", j),
-                paste("What are the column names in table", j, "of heating cycle", i, "?"),
-                placeholder = "Enter column names, separated by commas"
+                        paste("What are the column names in table", j, "of heating cycle", i, "?"),
+                        placeholder = "Enter column names, separated by commas"
               )
             })
           }
@@ -838,15 +828,15 @@ server <- function(input, output, session) {
       }
     }
   })
-
+  
   #Block coding for custom user input in case the user wants to manually change the titles in their table
   observe({
     if (input$keepTitles == FALSE) {
       numCycles <- as.numeric(input$heatingCycle)
-
+      
       # Initialize a list to store colTitles
       colTitlesList <- list()
-
+      
       # Update colTitles vector based on user inputs
       if (length(numCycles) == 0) {
         colTitles(NULL)
@@ -871,7 +861,7 @@ server <- function(input, output, session) {
               c() 
           }
         })
-
+        
         # Update colTitles with the list of vectors
         colTitles(colTitlesList)
       }
@@ -888,8 +878,8 @@ server <- function(input, output, session) {
   })
   
   #-----------------------------------------------------------------------------------
-
-
+  
+  
   observeEvent(input$runAnalysis, {
     cat("Run analysis button clicked.\n")
     
@@ -904,15 +894,15 @@ server <- function(input, output, session) {
     output$analysisMessage <- renderText({
       NULL
     })
-
+    
     #------------------------------------------------------------------------------------------------------------------------------------
     # Extract variables: include files, numCycles, tableTitle, outputLocation, outputExcel, outputSheet, Number of pans, outputSheetRaw
     #------------------------------------------------------------------------------------------------------------------------------------
-
+    
     # Extract uploaded files and get their paths
     files <- input$files
     filePaths <- files$datapath
-  
+    
     # Counting given files and assigning file path to file1, file2, or file3 based on the loop iteration
     fileCounter <- 0
     for (i in seq_along(filePaths)) {
@@ -921,7 +911,7 @@ server <- function(input, output, session) {
       assign(inputName, filePath)
       fileCounter <- fileCounter + 1
     }
-
+    
     # Extract other input data
     numCycles <- as.numeric(input$heatingCycle)
     tableTitle <- input$sampleName
@@ -939,7 +929,8 @@ server <- function(input, output, session) {
     }
     
     #---------------------------------------------------------------------------------------------------------------
-    # General error handling
+    # General error handling: several internal checks to make sure the user didn't make any mistakes. 
+    # Output consists of clear error messages. 
     #---------------------------------------------------------------------------------------------------------------
     
     # Check if files were uploaded
@@ -950,7 +941,7 @@ server <- function(input, output, session) {
       })
       return(NULL) # No files uploaded, exit the function
     }
-
+    
     # Check if output location was given
     if (is.null(outputLocation) || outputLocation == "") {
       print("Error: Output location not specified. Please provide the output folder path.")
@@ -1010,10 +1001,10 @@ server <- function(input, output, session) {
         output$errorMessage <- renderText({
           "Error: The Sheet you want to write to already exists in an excel file with the name you specified. Please choose a different file name or a different sheet name if you want another sheet to be written to the same excel."
         })
-      return(NULL)
+        return(NULL)
       } 
     }
-
+    
     # Check if outputSheet was given
     if (is.null(outputSheet) || outputSheet == "") {
       print("Error: Output sheet name not specified. Please provide the name of the sheet in the output Excel file.")
@@ -1067,7 +1058,7 @@ server <- function(input, output, session) {
       })
       return(NULL)
     }
-
+    
     # Check the number of pans uploaded
     if (fileCounter != pans) {
       print("Error: It seems that you have uploaded more or less files that you have pans according to your input. Please check your input and try again.")
@@ -1076,7 +1067,7 @@ server <- function(input, output, session) {
       })
       return(NULL)
     }
-
+    
     # Check if name for the raw Excel sheet was given
     if (input$saveRaw == TRUE) {
       if (is.null(outputSheetRaw) || outputSheetRaw == "") {
@@ -1107,7 +1098,9 @@ server <- function(input, output, session) {
     # Data is retrieved from allcycles and means, standard deviations and relative standard deviations (or spreads) are
     # calculated, first by outputting them into dataFrameCycle and then combining those into CombinedStats
     # Data is retrieved from CombinedStats per heating cycle in dataframes called dataFrameCycleTemp which are 
-    # immediately written to an excel and formatted before the loop restarts. 
+    # immediately written to an excel and formatted before the loop restarts.
+    # The reason for this many intermediate steps is to be able to potentially expand the project in the future: it might 
+    # be useful to have these extra dataframes on hand. 
     #---------------------------------------------------------------------------------------------------------------
     
     # Read given docx files and extract tables
@@ -1115,7 +1108,7 @@ server <- function(input, output, session) {
       doc <- read_docx(get(paste0("file", i)))
       assign(paste0("tablesDoc", i), docx_extract_all_tbls(doc))
     }
-
+    
     # Further error handling: check the number of tables in the document and the user-specified number
     if (length(get(paste0("tablesDoc", 1))) != sum(numTables())) {
       print("Error: It seems that the sum of the number of tables you said the document has via the dropdown menus doesn't match the real number of tables in the document. Please check your input and try again.")
@@ -1124,7 +1117,7 @@ server <- function(input, output, session) {
       })
       return(NULL)
     }
-
+    
     #Setting up integers and data frames for subsequent iterations. 
     tableStart <- 1
     allCycles <- data.frame()
@@ -1155,16 +1148,16 @@ server <- function(input, output, session) {
             return(NULL)
           }
         }
-
+        
         tempDfDoc1 <- (get(paste0("tempDfDoc", 1)))
         numColHeatingCycleTemp <- (ncol(tempDfDoc1[2, ]) - 1)
         numColHeatingCycle <- c(numColHeatingCycle, numColHeatingCycleTemp)
         tempDf <- c()
-
+        
         for (p in 1:pans) {
           # Create the variable name dynamically
           tempDfDoc <- get(paste0("tempDfDoc", p))
-
+          
           # Check the number of columns
           if (ncol(tempDfDoc) != 2) {
             if (p == 1) {
@@ -1184,8 +1177,8 @@ server <- function(input, output, session) {
         # Clean and convert the values in tables
         tempDf <- as.numeric(lapply(tempDf, cleanAndConvert))
         tempDf <- as.numeric(lapply(tempDf, as.numeric))
-
-
+        
+        
         if (j == 1) {
           # Create a df if it's the first table
           df <- rbind(df, tempDf)
@@ -1207,7 +1200,7 @@ server <- function(input, output, session) {
               }
             }
           }
-
+          
           if (ncol(df) < length(tempDf)) {
             for (a in 1:(((length(tempDf)) - (ncol(df))) / pans)) {
               tempLength <- ncol(df)
@@ -1224,15 +1217,15 @@ server <- function(input, output, session) {
               }
             }
           }
-
+          
           df <- rbind(df, tempDf)
         }
         as.data.frame(df)
         names(df) <- paste("col", 1:ncol(df), sep = "")
         tableStart <- t + 1
       }
-
-
+      
+      
       if (i == 1) {
         # Create allCycles df if it's the first heating cycle
         allCycles <- df
@@ -1255,7 +1248,7 @@ server <- function(input, output, session) {
             }
           }
         }
-
+        
         if (ncol(allCycles) < ncol(df)) {
           for (a in 1:(((ncol(df)) - (ncol(allCycles))) / pans)) {
             tempLength <- ncol(allCycles)
@@ -1276,8 +1269,8 @@ server <- function(input, output, session) {
         names(allCycles) <- paste("col", 1:ncol(allCycles), sep = "")
         allCycles <- rbind(allCycles, df)
       }
-
-
+      
+      # Create dataFrameCycle df if it's the first heating cycle
       dataFrameCycle <- data.frame()
       if (numTables()[i] == 1) {
         for (c in 1:((ncol(df)) / pans)) {
@@ -1287,6 +1280,7 @@ server <- function(input, output, session) {
           }
           tempRow <- c("")
           tempRow <- c(tempRow, mean(tempVec))
+          #Calculate spread instead of SD whne the number of pans = 2
           if (pans != 2) {
             tempRow <- c(tempRow, sd(tempVec))
             tempRow <- c(tempRow, (sd(tempVec) / mean(tempVec) * 100))
@@ -1295,9 +1289,11 @@ server <- function(input, output, session) {
             tempRow <- c(tempRow, tempVecDiff)
             tempRow <- c(tempRow, (tempVecDiff / mean(tempVec) * 100))
           }
-
+          
           dataFrameCycle <- rbind(dataFrameCycle, tempRow)
         }
+        
+      # If it's not the first cycle, values will be appended to allCycles
       } else {
         for (r in 1:numTables()[i]) {
           for (c in 1:((ncol(df)) / pans)) {
@@ -1315,12 +1311,13 @@ server <- function(input, output, session) {
               tempRow <- c(tempRow, tempVecDiff)
               tempRow <- c(tempRow, (tempVecDiff / mean(tempVec) * 100))
             }
-
+            
             dataFrameCycle <- rbind(dataFrameCycle, tempRow)
           }
         }
       }
-
+      
+      #Add some titles to dataFrameCycle and create combinedStats
       if (pans != 2) {
         names(dataFrameCycle) <- c(paste(tableTitle, ": Heating Cycle"), "Means", "Standard deviations", "Relative standard deviations")
       } else {
@@ -1328,8 +1325,9 @@ server <- function(input, output, session) {
       }
       combinedStats <- rbind(combinedStats, dataFrameCycle)
     }
-
-
+    
+    
+    #Manipulate the colTitles so they match the rest of the data. 
     if (input$keepTitles == TRUE) {
       colTitles <- list()
       sumVal <- 0
@@ -1370,9 +1368,9 @@ server <- function(input, output, session) {
         sumVal <- sumVal + numTables()[i]
       }
     }
-
+    
     sumColTitles <- 0
-
+    
     if (input$keepTitles == FALSE) {
       for (i in 1:numCycles) {
         sumColTitles <- (sumColTitles + length(colTitles()[[i]]))
@@ -1384,8 +1382,8 @@ server <- function(input, output, session) {
       }
       sumNumColHeatingCycle <- sum(numColHeatingCycle)
     }
-
-    # Further error handling: Check the inputed number of titles
+    
+    # Further error handling: Check the input number of titles
     if (sumColTitles != sumNumColHeatingCycle) {
       print("It seems that the number of titles you put in when setting up your method doesn't match the amount of columns in the data you're trying to save to Excel. Make sure they match and make sure to save a new template.")
       output$errorMessage <- renderText({
@@ -1393,29 +1391,30 @@ server <- function(input, output, session) {
       })
       return(NULL)
     }
-
-
+    
+    #Create some variables to use in a subsequent loop and clean up Combinedstats. 
     combinedStats <- na.omit(combinedStats)
     sumVal <- 0
     sumCols <- 0
     colTitlesTemp <- c()
     emptyDf <- data.frame(NA)
     names(emptyDf) <- ""
-
-
+    
+    #Create an Excel file using the user input name in case one doesn't exist yet. 
     excelFile <- paste(outputExcel, ".xlsx", sep = "")
     if (file.exists(excelFile)) {
       wb <- loadWorkbook(paste(outputExcel, ".xlsx", sep = ""))
     } else {
       wb <- createWorkbook()
     }
-
-
-    # Add a worksheet to the workbook
+    
+    
+    # Add a worksheet to the workbook in the Excel file. 
     addWorksheet(wb, outputSheet)
-
+    
     t <- 1
-
+    
+    # Eetrieve data from combinedStats in order to prepare it for export to Excel. Some titles are added but they are not final.  
     for (i in 1:numCycles) {
       j <- numTables()[i]
       if (sumVal == 0) {
@@ -1442,7 +1441,8 @@ server <- function(input, output, session) {
           dataFrameCycleTemp[, j] <- as.numeric(dataFrameCycleTemp[, j])
           dataFrameCycleTemp[, j] <- round(dataFrameCycleTemp[, j], digits = round)
         }
-
+        
+      #Add final titles and round values according to user input. 
         finalOutput <- dataFrameCycleTemp
       } else {
         if (pans != 2) {
@@ -1455,10 +1455,11 @@ server <- function(input, output, session) {
           dataFrameCycleTemp[, j] <- round(dataFrameCycleTemp[, j], digits = round)
         }
       }
-
+      
       # Write the data to the worksheet
       writeData(wb, sheet = outputSheet, dataFrameCycleTemp, startCol = t, startRow = 1)
-
+      
+      #Style the table exported to Excel
       writeDataTable(
         wb,
         outputSheet,
@@ -1478,22 +1479,22 @@ server <- function(input, output, session) {
         bandedRows = openxlsx_getOp("bandedRows", TRUE),
         bandedCols = openxlsx_getOp("bandedCols", FALSE),
       )
-
+      
       widthVecHeader <- nchar(colnames(dataFrameCycleTemp)) + 3.5
       setColWidths(wb, sheet = outputSheet, cols = t:(t + 3), widths = widthVecHeader)
       setColWidths(wb, sheet = outputSheet, cols = (t + 4), widths = 3)
-
+      
       t <- t + 5
     }
     
-    # Save the workbook to a file
+    # Save the workbook
     saveWorkbook(wb, paste(outputExcel, ".xlsx", sep = ""), overwrite = TRUE)
-
-    # Save raw data to the Excel sheet
+    
+    # Save raw data to the Excel sheet: this code is very similar to the code above but without the descriptive statistics. 
     if (input$saveRaw == TRUE) {
       wb <- loadWorkbook(paste(outputExcel, ".xlsx", sep = ""))
       addWorksheet(wb, outputSheetRaw)
-
+      
       sumVal <- 0
       sumCols <- 0
       colTitlesTemp <- c()
@@ -1510,19 +1511,19 @@ server <- function(input, output, session) {
             dfRawTemp1 <- get(paste0("tablesDoc", p))
             dfRawTemp2 <- dfRawTemp1[[t]]
             dfRawTemp3 <- dfRawTemp2[2, 2:length(dfRawTemp2)]
-
+            
             dfRawTemp3 <- as.numeric(lapply(dfRawTemp3, cleanAndConvert))
             dfRawTemp3 <- as.numeric(lapply(dfRawTemp3, as.numeric))
-
-
+            
+            
             if (t == 1) {
               dfRawPan <- dfRawTemp3
             } else {
               dfRawPan <- c(dfRawPan, dfRawTemp3)
             }
-
+            
             t <- t + 1
-
+            
             if (i == numCycles) {
               if (j == numTables()[i]) {
                 if (p == 1) {
@@ -1536,17 +1537,17 @@ server <- function(input, output, session) {
           }
         }
       }
-
-
+      
+      
       for (j in 1:ncol(dfRaw)) {
         dfRaw[, j] <- as.numeric(dfRaw[, j])
       }
-
+      
       dfRaw <- as.data.frame(dfRaw)
-
+      
       for (i in 1:numCycles) {
         j <- numTables()[i]
-
+        
         if (sumVal == 0) {
           numCols <- sum(numColHeatingCycle[(sumVal):(sumVal + j)])
         } else {
@@ -1554,28 +1555,28 @@ server <- function(input, output, session) {
         }
         sumVal <- (sumVal + j)
         dataFrameCycleTempRaw <- dfRaw[(sumCols + 1):(sumCols + numCols), ]
-
+        
         if (input$keepTitles == FALSE) {
           colTitlesTemp <- colTitles()[[i]]
         } else {
           colTitlesTemp <- colTitles[[i]]
         }
-
-
+        
+        
         dataFrameCycleTempRaw <- cbind(colTitlesTemp, dataFrameCycleTempRaw)
         sumCols <- (sumCols + numCols)
-
+        
         panTitles <- c()
-
+        
         for (p in 1:pans) {
           pan <- paste0("pan ", p)
           panTitles <- c(panTitles, pan)
         }
         names(dataFrameCycleTempRaw) <- c(paste(tableTitle, ": Heating Cycle ", i), panTitles)
-
-
+        
+        
         writeData(wb, sheet = outputSheetRaw, dataFrameCycleTempRaw, startCol = col, startRow = 1)
-
+        
         writeDataTable(
           wb,
           outputSheetRaw,
@@ -1595,16 +1596,17 @@ server <- function(input, output, session) {
           bandedRows = openxlsx_getOp("bandedRows", TRUE),
           bandedCols = openxlsx_getOp("bandedCols", FALSE),
         )
-
+        
         widthVecHeader <- nchar(colnames(dataFrameCycleTempRaw)) + 3.5
         setColWidths(wb, sheet = outputSheetRaw, cols = col:(col + pans), widths = widthVecHeader)
         setColWidths(wb, sheet = outputSheetRaw, cols = (col + pans + 1), widths = 3)
-
+        
         col <- col + pans + 2
       }
       saveWorkbook(wb, paste(outputExcel, ".xlsx", sep = ""), overwrite = TRUE)
     }
-
+    
+    #The users see this text if the analysis worked well. 
     output$analysisMessage <- renderText({
       "Analysis completed! Your file is now available in the directory you chose :)"
     })
