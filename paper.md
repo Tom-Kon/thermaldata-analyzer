@@ -20,7 +20,7 @@ affiliations:
    index: 1
  - name: Faculty of Bioscience Engineering, Kasteelpark Arenberg 20, University of Leuven (KU Leuven), 3001 Leuven, Belgium
    index: 2
-date: Submitted on 3rd June 2024
+date: Submitted to the journal of open source software on 4th June 2024
 bibliography: paper.bib
 ---
 
