@@ -36,15 +36,9 @@ The app mainly focuses on analyzing differential scanning calorimetry (DSC) data
 
 
 ![Figure 1: The user interface for input of data. On the following page, users are prompted to provide inputs such as the files to analyze and the desired name for the output Excel file. Additionally, the button to initiate the analysis is located on  page 2.](Figures/figure1_main_menu.png)
-<br>
 
-<p align="center">
-  <img src="https://github.com/Tom-Kon/thermaldata-analyzer/blob/main/Figures/figure%202%20tutorial.png" width='60%'>
-  <br>
-  <em>Figure 2: The tutorial, also present in the app, gives detailed instructions regarding the input data and guidelines for creating necessary documents in TRIOS. Additionally, it outlines the program's limitations and offers a brief overview of the code's functionality.</em>
-</p>
+![Figure 2: The tutorial, also present in the app, gives detailed instructions regarding the input data and guidelines for creating necessary documents in TRIOS. Additionally, it outlines the program's limitations and offers a brief overview of the code's functionality.](Figures/figure2_tutorial.png)
 
-<br>
 
 # Mathematics
 The formulas used in the code for an input consisting of at least three replicates are the standard formulas for calculating the mean ($\overline{x}$), standard deviation (s) and relative standard deviation (%, RSD) of a dataset with n observations ($x_i$). 
