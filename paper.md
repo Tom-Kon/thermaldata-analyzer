@@ -60,6 +60,26 @@ The formulas used in the code for an input consisting of at least three replicat
 \overline{x} = \sum_{i=1}^{i=n} \ x_i * \frac{1}{n}
 \end{equation}
 
+\begin{equation}
+s = \sqrt{\sum_{i=1}^{i=n} \ (x_i - \overline{x})^2 * \frac{1}{n-1}}
+\end{equation}
+
+\begin{equation}
+RSD  (\\%) = \frac{s}{\overline{x}} * 100 \\%
+\end{equation}
+
+In case only duplicates were performed, the spread and relative spread are calculated instead of the standard deviation and relative standard deviation. 
+
+\begin{equation}
+spread = |x_1 - x_2|
+\end{equation}
+
+\begin{equation}
+relative \ spread (\\%) = \frac{spread}{\overline{x}} * 100 \\%
+\end{equation}
+
+
+
 # Acknowledgements
 The software presented in this paper was developed as part of a project funded by the Flemish fund for scientific research (project 1SH0S24N). The authors also acknowledge Prof. Guy Van den Mooter’s help in reviewing the manuscript. 
 
