@@ -65,7 +65,7 @@ s = \sqrt{\sum_{i=1}^{i=n} \ (x_i - \overline{x})^2 * \frac{1}{n-1}}
 \end{equation}
 
 \begin{equation}
-RSD  (\\%) = \frac{s}{\overline{x}} * 100 \\%
+RSD  (\%) = \frac{s}{\overline{x}} * 100 \%
 \end{equation}
 
 In case only duplicates were performed, the spread and relative spread are calculated instead of the standard deviation and relative standard deviation. 
@@ -75,7 +75,7 @@ spread = |x_1 - x_2|
 \end{equation}
 
 \begin{equation}
-relative \ spread (\\%) = \frac{spread}{\overline{x}} * 100 \\%
+relative \ spread (\%) = \frac{spread}{\overline{x}} * 100 \%
 \end{equation}
 
 
