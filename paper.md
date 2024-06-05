@@ -35,9 +35,9 @@ The abovementioned limitation can, of course, be addressed by a program. However
 The app mainly focuses on analyzing differential scanning calorimetry (DSC) data, but this is visible only in the nomenclature of the output. However, it can be used for any data obtained in TRIOS, including data from different instruments. Data generated using older TA instruments can still be opened in TRIOS, meaning that the software presented in this paper is also compatible with these instruments.  The app is capable of processing nearly any data structure as input, with limitations outlined in the tutorial section (Figure 2) of the app.
 
 
-![Figure 1: The user interface for input of data. On the following page, users are prompted to provide inputs such as the files to analyze and the desired name for the output Excel file. Additionally, the button to initiate the analysis is located on  page 2.](Figures/figure1_main_menu.png)
+![The user interface for input of data. On the following page, users are prompted to provide inputs such as the files to analyze and the desired name for the output Excel file. Additionally, the button to initiate the analysis is located on  page 2.](Figures/figure1_main_menu.png)
 
-![Figure 2: The tutorial, also present in the app, gives detailed instructions regarding the input data and guidelines for creating necessary documents in TRIOS. Additionally, it outlines the program's limitations and offers a brief overview of the code's functionality.](Figures/figure2_tutorial.png)
+![The tutorial, also present in the app, gives detailed instructions regarding the input data and guidelines for creating necessary documents in TRIOS. Additionally, it outlines the program's limitations and offers a brief overview of the code's functionality.](Figures/figure2_tutorial.png)
 
 
 # Mathematics
