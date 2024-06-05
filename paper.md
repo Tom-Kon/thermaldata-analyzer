@@ -53,22 +53,6 @@ The app mainly focuses on analyzing differential scanning calorimetry (DSC) data
 
 <br>
 
-# Mathematics
-The formulas used in the code for an input consisting of at least three replicates are the standard formulas for calculating the mean ($\overline{x}$), standard deviation (s) and relative standard deviation (%, RSD) of a dataset with n observations ($x_i$). 
-
-$$\overline{x} = \sum_{i=1}^{i=n} \ x_i * \frac{1}{n}$$
-
-
-$$ s = \sqrt{\sum_{i=1}^{i=n} \ (x_i - \overline{x})^2 * \frac{1}{n-1}}$$
-
-
-$$ RSD  (\\%) = \frac{s}{\overline{x}} * 100 \\% $$
-
-In case only duplicates were performed, the spread and relative spread are calculated instead of the standard deviation and relative standard deviation. 
-
-$$ spread = |x_1 - x_2| $$
-
-$$ relative \ spread (\\%) = \frac{spread}{\overline{x}} * 100 \\% $$
 
 
 # Acknowledgements
